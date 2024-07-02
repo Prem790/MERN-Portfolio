@@ -23,7 +23,7 @@ function App() {
   const getPortfolioData = async () => {
     try {
       dispatch(ShowLoading());
-      const response = await axios.get("/api/portfolio/get-portfolio-data");
+      const response = await axios.get("https://mern-portfolio-server-2ft6.onrender.com/api/portfolio/get-portfolio-data");
       dispatch(SetPortfolioData(response.data));
       dispatch(SetReloadData(false));
       dispatch(HideLoading());
