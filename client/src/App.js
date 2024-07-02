@@ -14,7 +14,7 @@ import Admin from "./pages/Admin";
 import Login from "./pages/Admin/Login";
 
 function App() {
-  const { loading, portfolioData, reloadData } = useSelector(
+  const { loading, portfolioData, reloadData } + useSelector(
     (state) => state.root
   );
   const dispatch = useDispatch();
