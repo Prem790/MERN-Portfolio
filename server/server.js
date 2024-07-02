@@ -8,6 +8,7 @@
 
  const portfolioRoute=require("./routes/portfolioRoute");
  app.use(express.json());
+app.use(cors({ origin: "https://mern-portfolio-client-yaps.onrender.com" }));
  app.use("/api/portfolio",portfolioRoute);
 
 
