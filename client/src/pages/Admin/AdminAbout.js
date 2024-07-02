@@ -13,7 +13,7 @@ function AdminAbout() {
       const tempSKills = values.skills.split(",");
       values.skills=tempSKills;
       dispatch(ShowLoading());
-      const response= await axios.post("/api/portfolio/update-about" ,{
+      const response= await axios.post("https://mern-portfolio-server-2ft6.onrender.com/api/portfolio/update-about" ,{
         ...values,
         _id:portfolioData.about._id,
       });
