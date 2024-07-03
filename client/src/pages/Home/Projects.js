@@ -62,6 +62,23 @@ function Projects() {
               repudiandae lorem ipsum dolor sit amet consectetur adipisicing
               elit.
             </p>
+                 {projects[selectedItemIndex].link &&
+              projects[selectedItemIndex].link.trim() && (
+                <h1 className="text-white text-xl">
+                  URL:{" "}
+                  <a
+                    href={`https://${projects[selectedItemIndex].link.replace(
+                      /(^\w+:|^)\/\//,
+                      ""
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold text-tertiary underline"
+                  >
+                    {projects[selectedItemIndex].link}
+                  </a>
+                </h1>
+              )}
           </div>
         </div>
       </div>
