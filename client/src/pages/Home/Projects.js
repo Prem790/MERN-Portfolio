@@ -56,12 +56,7 @@ function Projects() {
               {projects[selectedItemIndex].description}
             </p>
 
-            <p className="text-white">
-              lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Necessitatibus quaerat voluptatum eaque nulla ipsam velit
-              repudiandae lorem ipsum dolor sit amet consectetur adipisicing
-              elit.
-            </p>
+
                  {projects[selectedItemIndex].link &&
               projects[selectedItemIndex].link.trim() && (
                 <h1 className="text-white text-xl">
