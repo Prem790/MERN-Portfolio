@@ -38,7 +38,7 @@ function Login() {
   return (
     <div className='flex justify-center items-center h-screen bg-primary'>
         <div className='w-96 flex gap-5 p-5 shadow border-gray-500 flex-col bg-white'>
-            <h1 className='text-2xl'>Prem - Admi Login</h1>
+            <h1 className='text-2xl'>Prem - Admin Login</h1>
             <hr/>
             <input type='text'
             value={user.username}
