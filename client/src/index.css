@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 /* App.css */
-@import '~antd/dist/reset.css';
+@import 'antd/dist/reset.css';
 
 
 @tailwind base;
