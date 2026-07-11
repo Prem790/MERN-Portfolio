@@ -30,7 +30,7 @@ function About() {
         </h1>
         <div className="flex flex-wrap gap-8 justify-start text-white font-bold uppercase mt-10 ">
           {skills.map((skill, index) => (
-            <div className="border border-tertiary py-3 px-4">
+            <div key={index} className="border border-tertiary py-3 px-4">
               <h1 className="text-tertiary ">{skill}</h1>
             </div>
           ))}

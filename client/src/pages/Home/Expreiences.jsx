@@ -11,7 +11,18 @@ function Expreiences() {
 
     const [selectedItemIndex, setSelectedItemIndex] = React.useState(0);
     const {portfolioData} = useSelector((state)=>state.root);
-    const {expreiences} = portfolioData;
+    const expreiences = portfolioData?.expreiences || [];
+
+  if (expreiences.length === 0) {
+    return (
+      <div>
+        <SectionTitle title="Experiences" />
+        <p className="text-tertiary py-10">No experiences added yet.</p>
+      </div>
+    );
+  }
+
+  const selected = expreiences[selectedItemIndex] || expreiences[0];
 
   return (
     <div>
@@ -19,7 +30,7 @@ function Expreiences() {
         <div className="flex py-10 gap-20 sm:flex-col">
         <div className="flex flex-col gap-10 border-l-2 border-tertiary w-1/3 sm:flex-row sm:overflow-x-scroll sm:w-full">
             {expreiences.map((experience,index)=>(
-                <div onClick={()=>{
+                <div key={experience._id || index} onClick={()=>{
                     setSelectedItemIndex(index)
                 }}
                 className="cursor-pointer">
@@ -31,23 +42,23 @@ function Expreiences() {
 
         <div className="flex flex-col gap-5">
             <h1 className="text-secondary text-2xl">
-            {expreiences[selectedItemIndex].title}
+            {selected.title}
             </h1>
             <h1 className="text-[#707373] text-xl">
-            {expreiences[selectedItemIndex].company}
+            {selected.company}
             </h1>
             <p className="text-white">
-           lorem  ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus quaerat voluptatum eaque nulla ipsam velit repudiandae  lorem  ipsum dolor sit amet consectetur adipisicing elit. 
+           {selected.description}
            </p>
-          
+
+        </div>
+
+
+
         </div>
 
 
 
-        </div>
-        
-
-        
     </div>
   )
 }

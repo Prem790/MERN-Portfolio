@@ -16,8 +16,8 @@ function Contact() {
             <div className="flex flex-col gap-2">
             <p className="text-tertiary ">{'{'}</p>
             {Object.keys(contact).map((key)=>
-            key!== "_id" && (
-              <p className="ml-5">
+            key!== "_id" && key !== "__v" && (
+              <p key={key} className="ml-5">
                     <span className="text-tertiary">{key} : </span>
                     <span className="text-tertiary">{contact[key]}</span>
                 </p>
