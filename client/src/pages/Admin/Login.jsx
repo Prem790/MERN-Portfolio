@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import axios from 'axios';
+import axios, { API_URL } from '../../api';
 import React from 'react'
 import { HideLoading, ShowLoading } from '../../redux/rootSlice';
 import { useDispatch } from 'react-redux';
@@ -17,7 +17,7 @@ function Login() {
     const login = async ()=>{
         try {
             dispatch(ShowLoading());
-            const response=await axios.post("https://mern-portfolio-server-2ft6.onrender.com/api/portfolio/admin-login", user);
+            const response=await axios.post(`${API_URL}/admin-login`, user);
             dispatch(HideLoading());
             if(response.data.success){
                 message.success(response.data.message);

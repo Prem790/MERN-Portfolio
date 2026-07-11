@@ -8,9 +8,9 @@ import {
   UpdateExperience,
   DeleteExperience,
 } from "../../redux/rootSlice";
-import axios from "axios";
+import axios, { API_URL } from "../../api";
 
-const API = "https://mern-portfolio-server-2ft6.onrender.com/api/portfolio";
+const API = API_URL;
 
 function AdminExperiences() {
   const dispatch = useDispatch();

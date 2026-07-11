@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import { useEffect } from "react";
 import Loader from "./components/Loader";
-import axios from "axios";
+import axios, { API_URL } from "./api";
 import { useDispatch, useSelector } from "react-redux";
 import {
   ShowLoading,
@@ -44,7 +44,7 @@ function App() {
   const getPortfolioData = async () => {
     try {
       dispatch(ShowLoading());
-      const response = await axios.get("https://mern-portfolio-server-2ft6.onrender.com/api/portfolio/get-portfolio-data");
+      const response = await axios.get(`${API_URL}/get-portfolio-data`);
       dispatch(SetPortfolioData(response.data));
       dispatch(SetReloadData(false));
       dispatch(HideLoading());
