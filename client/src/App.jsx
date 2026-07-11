@@ -13,6 +13,27 @@ import {
 import Admin from "./pages/Admin";
 import Login from "./pages/Admin/Login";
 
+// Re-attach the saved JWT to every request after a page refresh.
+const savedToken = localStorage.getItem("token");
+if (savedToken) {
+  axios.defaults.headers.common["Authorization"] = `Bearer ${savedToken}`;
+}
+
+// If the token is missing/expired, drop it and send the user back to login.
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error?.response?.status === 401) {
+      localStorage.removeItem("token");
+      delete axios.defaults.headers.common["Authorization"];
+      if (window.location.pathname.startsWith("/admin")) {
+        window.location.href = "/admin-login";
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 function App() {
   const { loading, portfolioData, reloadData } = useSelector(
     (state) => state.root

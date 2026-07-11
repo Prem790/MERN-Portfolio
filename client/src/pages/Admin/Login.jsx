@@ -1,5 +1,4 @@
 import { message } from 'antd';
-import Password from 'antd/es/input/Password'
 import axios from 'axios';
 import React from 'react'
 import { HideLoading, ShowLoading } from '../../redux/rootSlice';
@@ -22,16 +21,19 @@ function Login() {
             dispatch(HideLoading());
             if(response.data.success){
                 message.success(response.data.message);
-                localStorage.setItem("token" , JSON.stringify(response.data));
+                // Store only the signed JWT and send it on every future request
+                localStorage.setItem("token", response.data.token);
+                axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
                 window.location.href="/admin";
             } else{
                 message.error(response.data.message);
             }
-            
+
         } catch (error) {
-            message.error("error.message");
             dispatch(HideLoading());
-            
+            message.error(
+                error?.response?.data?.message || error.message || "Login failed"
+            );
         }
     }
 
