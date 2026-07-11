@@ -1,16 +1,12 @@
- import rootSlice from "./rootSlice";
-import {combineReducers} from "redux";
-import {configureStore} from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
+import rootReducer from "./rootSlice";
 
+// Redux Toolkit's configureStore handles combining reducers for us,
+// so the legacy `redux` package and combineReducers are no longer needed.
+const store = configureStore({
+  reducer: {
+    root: rootReducer,
+  },
+});
 
-
-
- const reducer= combineReducers({
-    root:rootSlice,
- });
-
- const store=configureStore({
-    reducer,
- });
-
- export default store;
+export default store;

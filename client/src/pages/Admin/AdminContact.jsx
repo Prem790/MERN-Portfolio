@@ -1,32 +1,31 @@
 import React from "react";
-import { Form, Input } from "antd";
+import { Form, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import {ShowLoading , HideLoading} from "../../redux/rootSlice";
+import { ShowLoading, HideLoading, SetContact } from "../../redux/rootSlice";
 import axios from "axios";
-import { message } from "antd";
+
+const API = "https://mern-portfolio-server-2ft6.onrender.com/api/portfolio";
 
 function AdminContact() {
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
   const { portfolioData } = useSelector((state) => state.root);
   const onFinish = async (values) => {
     try {
       dispatch(ShowLoading());
-      const response= await axios.post("https://mern-portfolio-server-2ft6.onrender.com/api/portfolio/update-contact" ,{
+      const response = await axios.post(`${API}/update-contact`, {
         ...values,
-        _id:portfolioData.contact._id,
+        _id: portfolioData.contact._id,
       });
       dispatch(HideLoading());
-      if(response.data.success){
+      if (response.data.success) {
         message.success(response.data.message);
-      }
-      else{
+        dispatch(SetContact(response.data.data));
+      } else {
         message.error(response.data.message);
-        }
-      
+      }
     } catch (error) {
       dispatch(HideLoading());
-      message.error(error.message);
-      
+      message.error(error?.response?.data?.message || error.message);
     }
   };
 

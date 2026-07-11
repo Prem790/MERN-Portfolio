@@ -1,34 +1,35 @@
 import React from "react";
-import { Form, Input } from "antd";
+import { Form, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import {ShowLoading , HideLoading} from "../../redux/rootSlice";
+import { ShowLoading, HideLoading, SetAbout } from "../../redux/rootSlice";
 import axios from "axios";
-import { message } from "antd";
+
+const API = "https://mern-portfolio-server-2ft6.onrender.com/api/portfolio";
 
 function AdminAbout() {
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
   const { portfolioData } = useSelector((state) => state.root);
   const onFinish = async (values) => {
     try {
-      const tempSKills = values.skills.split(",");
-      values.skills=tempSKills;
+      values.skills = (values.skills || "")
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
       dispatch(ShowLoading());
-      const response= await axios.post("https://mern-portfolio-server-2ft6.onrender.com/api/portfolio/update-about" ,{
+      const response = await axios.post(`${API}/update-about`, {
         ...values,
-        _id:portfolioData.about._id,
+        _id: portfolioData.about._id,
       });
       dispatch(HideLoading());
-      if(response.data.success){
+      if (response.data.success) {
         message.success(response.data.message);
-      }
-      else{
+        dispatch(SetAbout(response.data.data));
+      } else {
         message.error(response.data.message);
-        }
-      
+      }
     } catch (error) {
       dispatch(HideLoading());
-      message.error(error.message);
-      
+      message.error(error?.response?.data?.message || error.message);
     }
   };
 

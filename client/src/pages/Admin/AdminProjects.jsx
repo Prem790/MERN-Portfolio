@@ -1,8 +1,16 @@
 import { Form, Modal, message } from "antd";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { HideLoading, SetReloadData, ShowLoading } from "../../redux/rootSlice";
+import {
+  HideLoading,
+  ShowLoading,
+  AddProject,
+  UpdateProject,
+  DeleteProject,
+} from "../../redux/rootSlice";
 import axios from "axios";
+
+const API = "https://mern-portfolio-server-2ft6.onrender.com/api/portfolio";
 
 function AdminProjects() {
   const dispatch = useDispatch();
@@ -15,61 +23,61 @@ function AdminProjects() {
 
   const onFinish = async (values) => {
     try {
-        const tempTechnologies=values?.technologies?.split(",") || [];
-        values.technologies=tempTechnologies;
+      values.technologies = (values.technologies || "")
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean);
 
       dispatch(ShowLoading());
       let response;
       if (selectedItemForEdit) {
-        response = await axios.post("https://mern-portfolio-server-2ft6.onrender.com/api/portfolio/update-project",{
-            ...values,
-            _id: selectedItemForEdit._id,
+        response = await axios.post(`${API}/update-project`, {
+          ...values,
+          _id: selectedItemForEdit._id,
+        });
+      } else {
+        response = await axios.post(`${API}/add-project`, values);
+      }
 
-        });   
-    }
-    else{
-        response = await axios.post(
-            "https://mern-portfolio-server-2ft6.onrender.com/api/portfolio/add-project",
-            values
-          );
-    }
-      
       dispatch(HideLoading());
       if (response.data.success) {
         message.success(response.data.message);
+        // Update the store locally — no full re-fetch needed.
+        if (selectedItemForEdit) {
+          dispatch(UpdateProject(response.data.data));
+        } else {
+          dispatch(AddProject(response.data.data));
+        }
         setShowAddEditModal(false);
         setSelectedItemForEdit(null);
-        dispatch(HideLoading());
-        dispatch(SetReloadData(true));
         form.resetFields();
       } else {
         message.error(response.data.message);
       }
     } catch (error) {
       dispatch(HideLoading());
-      message.error(error.message);
+      message.error(error?.response?.data?.message || error.message);
     }
   };
 
-  const onDelete = async(item)=>{
+  const onDelete = async (item) => {
     try {
-        dispatch(ShowLoading());
-        let response = await axios.post("https://mern-portfolio-server-2ft6.onrender.com/api/portfolio/delete-project",{
-            _id: item._id,
-            });
-            dispatch(HideLoading());
-            if (response.data.success) {
-                message.success(response.data.message);
-                dispatch(HideLoading());
-                dispatch(SetReloadData(true));
-                } else {
-                    message.error(response.data.message);
-                    }
-                    } catch (error) {
-                        dispatch(HideLoading());
-                        message.error(error.message);
-                        }
-                        }
+      dispatch(ShowLoading());
+      const response = await axios.post(`${API}/delete-project`, {
+        _id: item._id,
+      });
+      dispatch(HideLoading());
+      if (response.data.success) {
+        message.success(response.data.message);
+        dispatch(DeleteProject(item._id));
+      } else {
+        message.error(response.data.message);
+      }
+    } catch (error) {
+      dispatch(HideLoading());
+      message.error(error?.response?.data?.message || error.message);
+    }
+  };
 
   
 
@@ -88,7 +96,7 @@ function AdminProjects() {
       </div>
       <div className="grid grid-cols-3 gap-5 sm:grid-cols-1">
         {projects.map((project) => (
-          <div className="shadow border p-6 border-gray-400 flex flex-col gap-5">
+          <div key={project._id} className="shadow border p-6 border-gray-400 flex flex-col gap-5">
             <h1 className="text-tertiary text-xl font-bold">
               {project.title}
             </h1>
