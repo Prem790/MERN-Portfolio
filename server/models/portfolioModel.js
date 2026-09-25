@@ -72,15 +72,27 @@ const projectSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    required: true,
+    default: "",
   },
   link: {
     type: String,
-    required: true,
+    default: "",
+  },
+  liveLink: {
+    type: String,
+    default: "",
+  },
+  githubLink: {
+    type: String,
+    default: "",
+  },
+  featured: {
+    type: Boolean,
+    default: false,
   },
   technologies: {
     type: Array,
-    required: true,
+    default: [],
   },
 });
 
@@ -100,11 +112,11 @@ const contactSchema = new mongoose.Schema({
 
   address: {
     type: String,
-    required: true,
+    default: "",
   },
   gender: {
     type: String,
-    required: true,
+    default: "",
   },
 });
 module.exports = {

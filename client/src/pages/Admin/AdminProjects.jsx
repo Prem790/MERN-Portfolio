@@ -147,17 +147,20 @@ function AdminProjects() {
           <Form.Item name="title" label="Title">
             <input placeholder="Title" />
           </Form.Item>
-          <Form.Item name="image" label="Image URL">
-            <input placeholder="Image" />
+          <Form.Item name="image" label="Image URL (optional)">
+            <input placeholder="Image URL" />
           </Form.Item>
           <Form.Item name="description" label="Description">
             <textarea placeholder="Description" />
           </Form.Item>
-          <Form.Item name="link" label="Link">
-            <input placeholder="Link" />
+          <Form.Item name="link" label="Live / Demo URL (optional)">
+            <input placeholder="https://..." />
           </Form.Item>
-          <Form.Item name="technologies" label="Technologies">
-            <input placeholder="Technologies" />
+          <Form.Item name="githubLink" label="GitHub URL (optional)">
+            <input placeholder="https://github.com/..." />
+          </Form.Item>
+          <Form.Item name="technologies" label="Technologies (comma separated)">
+            <input placeholder="React, Node.js, ..." />
           </Form.Item>
 
 

@@ -46,20 +46,8 @@ function AdminContact() {
         <Form.Item name="mobile" label="Phone">
             <input placeholder="Phone" />
         </Form.Item>
-        <Form.Item name="address" label="Address">
-        <input placeholder="Address" />
-        </Form.Item>
-        <Form.Item name="gender" label="Gender">
-        <input placeholder="Gender" />
-        </Form.Item>
-        
 
-       
-       
-
-
-
-        <div className="flex justify-end w-full" label="Welcome Text">
+        <div className="flex justify-end w-full">
           <button className="px-10 py-2 bg-primary text-white" type="submit">SAVE</button>
         </div>
       </Form>
