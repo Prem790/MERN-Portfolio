@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400" fill="none">
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B0F17"/>
+      <stop offset="1" stop-color="#111826"/>
+    </linearGradient>
+    <linearGradient id="wave" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#45A29E"/>
+      <stop offset="0.5" stop-color="#66FCF1"/>
+      <stop offset="1" stop-color="#45A29E"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="400" fill="url(#bg3)"/>
+  <circle cx="400" cy="200" r="160" fill="#66FCF1" opacity="0.08"/>
+  <!-- equalizer bars, symmetric around center 200 -->
+  <g fill="url(#wave)">
+    <rect x="70"  y="170" width="14" height="60"  rx="7"/>
+    <rect x="110" y="140" width="14" height="120" rx="7"/>
+    <rect x="150" y="100" width="14" height="200" rx="7"/>
+    <rect x="190" y="150" width="14" height="100" rx="7"/>
+    <rect x="230" y="80"  width="14" height="240" rx="7"/>
+    <rect x="270" y="130" width="14" height="140" rx="7"/>
+    <rect x="310" y="60"  width="14" height="280" rx="7"/>
+    <rect x="350" y="120" width="14" height="160" rx="7"/>
+    <rect x="390" y="40"  width="14" height="320" rx="7"/>
+    <rect x="430" y="120" width="14" height="160" rx="7"/>
+    <rect x="470" y="70"  width="14" height="260" rx="7"/>
+    <rect x="510" y="130" width="14" height="140" rx="7"/>
+    <rect x="550" y="95"  width="14" height="210" rx="7"/>
+    <rect x="590" y="150" width="14" height="100" rx="7"/>
+    <rect x="630" y="110" width="14" height="180" rx="7"/>
+    <rect x="670" y="160" width="14" height="80"  rx="7"/>
+    <rect x="710" y="135" width="14" height="130" rx="7"/>
+  </g>
+  <!-- music note -->
+  <g transform="translate(360,150)" fill="#66FCF1">
+    <rect x="60" y="-40" width="7" height="110" rx="3"/>
+    <path d="M67 -40 L110 -54 V-28 L67 -14 Z"/>
+    <ellipse cx="52" cy="72" rx="18" ry="13"/>
+    <ellipse cx="102" cy="58" rx="18" ry="13"/>
+    <rect x="102" y="-54" width="7" height="112" rx="3"/>
+  </g>
+</svg>
