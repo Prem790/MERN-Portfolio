@@ -1,30 +1,37 @@
-import React from 'react'
+import React from "react";
+import { motion } from "framer-motion";
+
+const socials = [
+  { icon: "ri-mail-fill", href: "mailto:jadwaniprem12@gmail.com", label: "Email" },
+  { icon: "ri-linkedin-box-fill", href: "https://linkedin.com/in/prem-jadwani-5b8748221", label: "LinkedIn" },
+  { icon: "ri-github-fill", href: "https://github.com/Prem790", label: "GitHub" },
+];
 
 function LeftSlider() {
   return (
-    <div className="fixed left-0 bottom-0 px-10 sm:static">
-    <div className="flex flex-col items-center">
-    <div className="flex flex-col gap-4 sm:flex-row">
-    <a href="https://www.facebook.com/">
-        <i className="ri-facebook-circle-line text-gray-500 text-xl"></i>
-        </a>
-        <a href="mailto:jadwaniprem@gmail.com">
-        <i className="ri-mail-fill text-gray-500 text-xl"></i>
-        </a>
-        <a href="https://www.instagram.com/prem_jadwani/">
-        <i className="ri-instagram-line text-gray-500 text-xl"></i>
-        </a>
-        <a href="https://www.linkedin.com/in/prem-jadwani-5b8748221/"><i className="ri-linkedin-box-fill text-gray-500 text-xl"></i></a>
-        
-        <a href="https://github.com/Prem790"><i className="ri-github-fill text-gray-500 text-xl"></i>
-        </a>
-        </div>
-        <div className="w-[1px] h-32 bg-[#6B7280] sm:hidden">
-
-        </div>
+    <div className="fixed left-6 bottom-0 z-40 sm:static sm:left-0 sm:py-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.2, duration: 0.6 }}
+        className="flex flex-col items-center gap-5 sm:flex-row sm:justify-center"
+      >
+        {socials.map((s) => (
+          <a
+            key={s.label}
+            href={s.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={s.label}
+            className="grid place-items-center h-10 w-10 rounded-full glass text-gray-400 hover:text-secondary hover:shadow-glow-sm hover:-translate-y-1 transition-all duration-300"
+          >
+            <i className={`${s.icon} text-lg`} />
+          </a>
+        ))}
+        <div className="w-[1px] h-28 bg-gradient-to-b from-tertiary/50 to-transparent sm:hidden" />
+      </motion.div>
     </div>
-    </div>
-  )
+  );
 }
 
-export default LeftSlider
+export default LeftSlider;

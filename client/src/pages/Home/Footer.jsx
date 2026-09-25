@@ -1,22 +1,20 @@
-import React from 'react'
+import React from "react";
 
 function Footer() {
   return (
-    <div className="py-10">
-    <div className="h-[1px] w-full bg-gray-700">
-
-    </div>
-    <div className="flex items-center justify-center flex-col mt-10 opacity-70">
-    <h1 className="text-tertiary">Designed and Developed by</h1>
-    
-    <h1 className="text-white">
-    
-    <span className="text-tertiary">Prem Jadwani</span></h1>
-
-    </div>
-        
-    </div>
-  )
+    <footer className="py-12">
+      <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-tertiary/40 to-transparent" />
+      <div className="flex items-center justify-center flex-col mt-8 gap-1">
+        <p className="text-gray-400 text-sm">Designed &amp; developed by</p>
+        <p className="gradient-text font-display font-semibold text-lg">
+          Prem Jadwani
+        </p>
+        <p className="text-gray-600 text-xs mt-2">
+          © {new Date().getFullYear()} · Built with React, Vite &amp; Tailwind
+        </p>
+      </div>
+    </footer>
+  );
 }
 
-export default Footer
+export default Footer;
