@@ -1,4 +1,4 @@
-import { Form, Modal, message } from "antd";
+import { Form, Modal, Input, Button, Popconfirm, message } from "antd";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -20,6 +20,7 @@ function AdminProjects() {
   const [selectedItemForEdit, setSelectedItemForEdit] = React.useState(null);
   const [type , setType]=React.useState("add");
   const [form] = Form.useForm();
+  const watchedImage = Form.useWatch("image", form);
 
   const onFinish = async (values) => {
     try {
@@ -83,43 +84,63 @@ function AdminProjects() {
 
   return (
     <div>
-      <div className="flex justify-end">
-        <button
-          className="bg-primary px-5 py-2 text-white mb-5"
+      <div className="flex justify-between items-center mb-5">
+        <p className="text-gray-400 text-sm">{projects.length} project(s)</p>
+        <Button
+          type="primary"
           onClick={() => {
             setShowAddEditModal(true);
             setSelectedItemForEdit(null);
+            setType("add");
           }}
         >
-          Add Project
-        </button>
+          + Add Project
+        </Button>
       </div>
-      <div className="grid grid-cols-3 gap-5 sm:grid-cols-1">
+      <div className="grid grid-cols-3 gap-5 lg:grid-cols-2 sm:grid-cols-1">
         {projects.map((project) => (
-          <div key={project._id} className="shadow border p-6 border-gray-400 flex flex-col gap-5">
-            <h1 className="text-tertiary text-xl font-bold">
-              {project.title}
-            </h1>
-            <hr />
-           <img src={project.image} alt="" className="h-60 w-80"/>
-            <h1 className="font-semibold mt-2">Title : {project.title}</h1>
-            <h1 className="mt-2">Description : {project.description}</h1>
-            <div className="flex justify-end gap-5 mt-5">
-              <button className="bg-red-500 text-white px-5 py-2"
-              onClick={()=>{
-                onDelete(project);
-              }}
+          <div
+            key={project._id}
+            className="rounded-xl border border-white/10 bg-white/[0.03] p-5 flex flex-col gap-3"
+          >
+            {project.image ? (
+              <img
+                src={project.image}
+                alt={project.title}
+                className="h-32 w-full object-cover rounded-lg border border-white/10"
+              />
+            ) : (
+              <div className="h-32 w-full rounded-lg bg-gradient-to-br from-secondary/20 to-tertiary/10 grid place-items-center text-gray-500">
+                No image
+              </div>
+            )}
+            <h3 className="text-secondary font-semibold">{project.title}</h3>
+            <p className="text-gray-400 text-sm line-clamp-3">
+              {project.description}
+            </p>
+            <div className="flex justify-end gap-2 mt-auto pt-2">
+              <Popconfirm
+                title="Delete this project?"
+                description="This can't be undone."
+                okText="Delete"
+                okButtonProps={{ danger: true }}
+                cancelText="Cancel"
+                onConfirm={() => onDelete(project)}
               >
-                Delete
-              </button>
-              <button className="bg-tertiary text-white px-5 py-2"
-              onClick={()=>{
-                setSelectedItemForEdit(project);
-                setShowAddEditModal(true);
-                setType("edit");
-              }}
-              
-              >Edit</button>
+                <Button danger size="small">
+                  Delete
+                </Button>
+              </Popconfirm>
+              <Button
+                size="small"
+                onClick={() => {
+                  setSelectedItemForEdit(project);
+                  setShowAddEditModal(true);
+                  setType("edit");
+                }}
+              >
+                Edit
+              </Button>
             </div>
           </div>
         ))}
@@ -128,55 +149,83 @@ function AdminProjects() {
      {(type==="add" || selectedItemForEdit) && (
          <Modal
         open={showAddEditModal}
-        title={selectedItemForEdit ? "Edit Projects" : "Add Projects"}
+        title={selectedItemForEdit ? "Edit Project" : "Add Project"}
         footer={null}
+        destroyOnClose
         onCancel={() => {setShowAddEditModal(false)
         setSelectedItemForEdit(null);}}
       >
-        <Form 
+        <Form
+        key={selectedItemForEdit?._id || "new-project"}
         form={form}
-        layout="vertical" 
+        layout="vertical"
         onFinish={onFinish}
         initialValues={{
             ...selectedItemForEdit,
             technologies : selectedItemForEdit?.technologies?.join(" , "),
-            
+
 
         }}
         >
-          <Form.Item name="title" label="Title">
-            <input placeholder="Title" />
+          <Form.Item
+            name="title"
+            label="Title"
+            rules={[{ required: true, message: "Title is required" }]}
+          >
+            <Input placeholder="Project title" />
           </Form.Item>
           <Form.Item name="image" label="Image URL (optional)">
-            <input placeholder="Image URL" />
+            <Input placeholder="/projects/... or https://..." />
           </Form.Item>
-          <Form.Item name="description" label="Description">
-            <textarea placeholder="Description" />
+          {watchedImage && watchedImage.trim() && (
+            <div className="mb-4 -mt-2">
+              <img
+                src={watchedImage}
+                alt="preview"
+                className="h-28 w-full object-cover rounded-lg border border-white/10"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                }}
+                onLoad={(e) => {
+                  e.currentTarget.style.display = "block";
+                }}
+              />
+              <p className="text-xs text-gray-500 mt-1">Image preview</p>
+            </div>
+          )}
+          <Form.Item
+            name="description"
+            label="Description"
+            rules={[{ required: true, message: "Description is required" }]}
+          >
+            <Input.TextArea rows={4} placeholder="What it does, tech, impact" />
           </Form.Item>
           <Form.Item name="link" label="Live / Demo URL (optional)">
-            <input placeholder="https://..." />
+            <Input placeholder="https://..." />
           </Form.Item>
           <Form.Item name="githubLink" label="GitHub URL (optional)">
-            <input placeholder="https://github.com/..." />
+            <Input placeholder="https://github.com/..." />
           </Form.Item>
-          <Form.Item name="technologies" label="Technologies (comma separated)">
-            <input placeholder="React, Node.js, ..." />
+          <Form.Item
+            name="technologies"
+            label="Technologies"
+            extra="Separate each with a comma"
+          >
+            <Input placeholder="React, Node.js, ..." />
           </Form.Item>
 
-
-
-          <div className="flex justify-end">
-            <button
-              className="border-primary text-primary px-5 py-2"
+          <div className="flex justify-end gap-2">
+            <Button
               onClick={() => {
                 setShowAddEditModal(false);
+                setSelectedItemForEdit(null);
               }}
             >
               Cancel
-            </button>
-            <button className="bg-primary text-white px-5 py-2">
+            </Button>
+            <Button type="primary" htmlType="submit">
               {selectedItemForEdit ? "Update" : "Add"}
-            </button>
+            </Button>
           </div>
         </Form>
       </Modal>

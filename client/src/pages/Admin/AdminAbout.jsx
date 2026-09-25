@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, message } from "antd";
+import { Form, Input, Button, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { ShowLoading, HideLoading, SetAbout } from "../../redux/rootSlice";
 import axios, { API_URL } from "../../api";
@@ -36,6 +36,7 @@ function AdminAbout() {
   return (
     <div>
       <Form
+        key={JSON.stringify(portfolioData.about)}
         onFinish={onFinish}
         layout="vertical"
         initialValues={{
@@ -43,21 +44,27 @@ function AdminAbout() {
           skills: portfolioData.about.skills.join("  ,  ")
         }}
       >
-        <Form.Item name="lottieURL" label="Lottie URL">
-          <input placeholder="Lottie URL" />
+        <Form.Item name="lottieURL" label="Lottie Animation URL" rules={[{ required: true, message: "Required" }]}>
+          <Input placeholder="https://lottie.host/..." />
         </Form.Item>
-      
-        <Form.Item name="description1" label="Description-1">
-          <textarea placeholder="Description-1" />
+
+        <Form.Item name="description1" label="Description (paragraph 1)" rules={[{ required: true, message: "Required" }]}>
+          <Input.TextArea rows={3} placeholder="First paragraph" />
         </Form.Item>
-        <Form.Item name="description2" label="Description-2">
-          <textarea placeholder="Description-2" />
+        <Form.Item name="description2" label="Description (paragraph 2)" rules={[{ required: true, message: "Required" }]}>
+          <Input.TextArea rows={3} placeholder="Second paragraph" />
         </Form.Item>
-        <Form.Item name="skills" label="Skills">
-          <input placeholder="Skills" />
+        <Form.Item
+          name="skills"
+          label="Skills"
+          extra="Separate each skill with a comma"
+        >
+          <Input placeholder="React, Node.js, PostgreSQL, ..." />
         </Form.Item>
-        <div className="flex justify-end w-full" label="Welcome Text">
-          <button className="px-10 py-2 bg-primary text-white" type="submit">SAVE</button>
+        <div className="flex justify-end w-full">
+          <Button type="primary" htmlType="submit" size="large">
+            Save changes
+          </Button>
         </div>
       </Form>
     </div>

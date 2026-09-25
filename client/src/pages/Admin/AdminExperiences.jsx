@@ -1,4 +1,4 @@
-import { Form, Modal, message } from "antd";
+import { Form, Modal, Input, Button, Popconfirm, message } from "antd";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -75,45 +75,56 @@ function AdminExperiences() {
 
   return (
     <div>
-      <div className="flex justify-end">
-        <button
-          className="bg-primary px-5 py-2 text-white mb-5"
+      <div className="flex justify-between items-center mb-5">
+        <p className="text-gray-400 text-sm">{expreiences.length} experience(s)</p>
+        <Button
+          type="primary"
           onClick={() => {
             setShowAddEditModal(true);
             setSelectedItemForEdit(null);
+            setType("add");
           }}
         >
-          Add Experience
-        </button>
+          + Add Experience
+        </Button>
       </div>
-      <div className="grid grid-cols-4 gap-5 sm:grid-cols-1">
+      <div className="grid grid-cols-3 gap-5 lg:grid-cols-2 sm:grid-cols-1">
         {expreiences.map((expreience) => (
-          <div key={expreience._id} className="shadow border p-6 border-gray-400 flex flex-col">
-            <h1 className="text-tertiary text-xl font-bold">
+          <div
+            key={expreience._id}
+            className="rounded-xl border border-white/10 bg-white/[0.03] p-5 flex flex-col gap-2"
+          >
+            <span className="text-secondary text-sm font-medium">
               {expreience.period}
-            </h1>
-            <hr />
-            <h1 className="font-semibold mt-2">
-              Company : {expreience.company}
-            </h1>
-            <h1 className="font-semibold mt-2">Role : {expreience.title}</h1>
-            <h1 className="mt-2">Description : {expreience.description}</h1>
-            <div className="flex justify-end gap-5 mt-5">
-              <button className="bg-red-500 text-white px-5 py-2"
-              onClick={()=>{
-                onDelete(expreience);
-              }}
+            </span>
+            <h3 className="font-semibold">{expreience.title}</h3>
+            <p className="text-tertiary text-sm">{expreience.company}</p>
+            <p className="text-gray-400 text-sm line-clamp-3">
+              {expreience.description}
+            </p>
+            <div className="flex justify-end gap-2 mt-auto pt-2">
+              <Popconfirm
+                title="Delete this experience?"
+                description="This can't be undone."
+                okText="Delete"
+                okButtonProps={{ danger: true }}
+                cancelText="Cancel"
+                onConfirm={() => onDelete(expreience)}
               >
-                Delete
-              </button>
-              <button className="bg-tertiary text-white px-5 py-2"
-              onClick={()=>{
-                setSelectedItemForEdit(expreience);
-                setShowAddEditModal(true);
-                setType("edit");
-              }}
-              
-              >Edit</button>
+                <Button danger size="small">
+                  Delete
+                </Button>
+              </Popconfirm>
+              <Button
+                size="small"
+                onClick={() => {
+                  setSelectedItemForEdit(expreience);
+                  setShowAddEditModal(true);
+                  setType("edit");
+                }}
+              >
+                Edit
+              </Button>
             </div>
           </div>
         ))}
@@ -122,39 +133,58 @@ function AdminExperiences() {
      {(type==="add" || selectedItemForEdit) && (
          <Modal
         open={showAddEditModal}
-        title={selectedItemForEdit ? "Edit Experiences" : "Add Experiences"}
+        title={selectedItemForEdit ? "Edit Experience" : "Add Experience"}
         footer={null}
+        destroyOnClose
         onCancel={() => {setShowAddEditModal(false)
         setSelectedItemForEdit(null);}}
       >
-        <Form layout="vertical" 
+        <Form
+        key={selectedItemForEdit?._id || "new-experience"}
+        layout="vertical"
         onFinish={onFinish}
         initialValues={selectedItemForEdit}
         >
-          <Form.Item name="period" label="Period">
-            <input placeholder="Period" />
+          <Form.Item
+            name="period"
+            label="Period"
+            rules={[{ required: true, message: "Period is required" }]}
+          >
+            <Input placeholder="e.g. Sep 2025 – Present" />
           </Form.Item>
-          <Form.Item name="company" label="Company">
-            <input placeholder="Company" />
+          <Form.Item
+            name="company"
+            label="Company"
+            rules={[{ required: true, message: "Company is required" }]}
+          >
+            <Input placeholder="Company name" />
           </Form.Item>
-          <Form.Item name="title" label="Title">
-            <input placeholder="Title" />
+          <Form.Item
+            name="title"
+            label="Title / Role"
+            rules={[{ required: true, message: "Title is required" }]}
+          >
+            <Input placeholder="e.g. Full-Stack Developer" />
           </Form.Item>
-          <Form.Item name="description" label="Description">
-            <input placeholder="Description" />
+          <Form.Item
+            name="description"
+            label="Description"
+            rules={[{ required: true, message: "Description is required" }]}
+          >
+            <Input.TextArea rows={4} placeholder="What you did and the impact" />
           </Form.Item>
-          <div className="flex justify-end">
-            <button
-              className="border-primary text-primary px-5 py-2"
+          <div className="flex justify-end gap-2">
+            <Button
               onClick={() => {
                 setShowAddEditModal(false);
+                setSelectedItemForEdit(null);
               }}
             >
               Cancel
-            </button>
-            <button className="bg-primary text-white px-5 py-2">
+            </Button>
+            <Button type="primary" htmlType="submit">
               {selectedItemForEdit ? "Update" : "Add"}
-            </button>
+            </Button>
           </div>
         </Form>
       </Modal>

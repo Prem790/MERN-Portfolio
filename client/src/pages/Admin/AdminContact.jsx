@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, message } from "antd";
+import { Form, Input, Button, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { ShowLoading, HideLoading, SetContact } from "../../redux/rootSlice";
 import axios, { API_URL } from "../../api";
@@ -32,23 +32,33 @@ function AdminContact() {
   return (
     <div>
       <Form
+        key={JSON.stringify(portfolioData.contact)}
         onFinish={onFinish}
         layout="vertical"
         initialValues={portfolioData.contact}
       >
        
-        <Form.Item name="name" label="Name">
-          <input placeholder="Name" />
+        <Form.Item name="name" label="Name" rules={[{ required: true, message: "Required" }]}>
+          <Input placeholder="Full name" />
         </Form.Item>
-        <Form.Item name="email" label="Email">
-            <input placeholder="Email" />
+        <Form.Item
+          name="email"
+          label="Email"
+          rules={[
+            { required: true, message: "Required" },
+            { type: "email", message: "Enter a valid email" },
+          ]}
+        >
+          <Input placeholder="you@example.com" />
         </Form.Item>
-        <Form.Item name="mobile" label="Phone">
-            <input placeholder="Phone" />
+        <Form.Item name="mobile" label="Phone" rules={[{ required: true, message: "Required" }]}>
+          <Input placeholder="+91 ..." />
         </Form.Item>
 
         <div className="flex justify-end w-full">
-          <button className="px-10 py-2 bg-primary text-white" type="submit">SAVE</button>
+          <Button type="primary" htmlType="submit" size="large">
+            Save changes
+          </Button>
         </div>
       </Form>
     </div>

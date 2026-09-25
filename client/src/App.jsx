@@ -29,6 +29,7 @@ axios.interceptors.response.use(
       localStorage.removeItem("token");
       delete axios.defaults.headers.common["Authorization"];
       if (window.location.pathname.startsWith("/admin")) {
+        localStorage.setItem("sessionExpired", "1");
         window.location.href = "/admin-login";
       }
     }
