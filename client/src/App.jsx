@@ -1,17 +1,19 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import Loader from "./components/Loader";
 import axios, { API_URL } from "./api";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  ShowLoading,
   HideLoading,
   SetPortfolioData,
   SetReloadData,
 } from "./redux/rootSlice";
-import Admin from "./pages/Admin";
-import Login from "./pages/Admin/Login";
+
+// Code-split the admin area so its heavy dependencies (antd) are NOT
+// downloaded by regular visitors to the public portfolio.
+const Admin = lazy(() => import("./pages/Admin"));
+const Login = lazy(() => import("./pages/Admin/Login"));
 
 // Re-attach the saved JWT to every request after a page refresh.
 const savedToken = localStorage.getItem("token");
@@ -40,14 +42,13 @@ function App() {
   );
   const dispatch = useDispatch();
 
-  // Fetch data when the component mounts.
+  // Initial fetch shows the Home skeleton (no global spinner);
+  // ShowLoading/HideLoading is reserved for admin mutations.
   const getPortfolioData = async () => {
     try {
-      dispatch(ShowLoading());
       const response = await axios.get(`${API_URL}/get-portfolio-data`);
       dispatch(SetPortfolioData(response.data));
       dispatch(SetReloadData(false));
-      dispatch(HideLoading());
     } catch (error) {
       dispatch(HideLoading());
     }
@@ -63,17 +64,19 @@ function App() {
     if (reloadData) {
       getPortfolioData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reloadData]);
 
   return (
     <BrowserRouter>
       {loading ? <Loader /> : null}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/admin-login" element={<Login />} />
-
-      </Routes>
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin-login" element={<Login />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }
