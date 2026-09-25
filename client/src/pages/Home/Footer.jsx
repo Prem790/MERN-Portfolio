@@ -10,7 +10,7 @@ function Footer() {
           Prem Jadwani
         </p>
         <p className="text-gray-600 text-xs mt-2">
-          © {new Date().getFullYear()} · Built with React, Vite &amp; Tailwind
+          © {new Date().getFullYear()} Prem Jadwani. All rights reserved.
         </p>
       </div>
     </footer>
